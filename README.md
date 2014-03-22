@@ -48,6 +48,25 @@ Inject.rawModHtml(function(html) {
 * `Inject.appUrl(url)`.  A copy of Meteor's internal appUrl() method to see
 if a resource is should be served the initial HTML page.
 
+## Example
+
+```js
+if (Meteor.isServer) {
+  if (!Package.appcache)
+  WebApp.connectHandlers.use(function(req, res, next) {
+    if(Inject.appUrl(req.url)) {
+      Inject.obj('myData', makeData(), res);
+    }
+    next();
+  });
+}
+	
+if (Meteor.isClient) {
+  // available immediately
+  var myData = Inject.getObj('myData');
+}
+```
+
 ## Roadmap
 
 * Should we have functions like `isInjectable()` to check if appcache is
