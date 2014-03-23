@@ -18,26 +18,53 @@ to wait for anything or use any callbacks.
 
 ## API (from highest to lowest level)
 
-* `Inject.obj(name, obj)` let's you use `Inject.getObj(name)`.  Obj of course 
+With the functions below, `res` is the optional final argument.  If ommitted,
+the data will be injected on every HTTP request.  If present, the data will
+be specific for (and used only on) that http connection resource.
+
+* `Inject.obj(name, obj, [res])` let's you use `Inject.getObj(name)`.  Obj of course 
 contain data only, and not any references (to functions, other objects, etc).
 Stored in JSON in a META tag in the HEAD; this allows it to work even if
 `browserPolicy.content.disallowInlineScripts()` has been called.
 
-* `Inject.meta(name, content)` let's you use `Inject.getMeta(name)`.  This
+* `Inject.meta(name, content, [res])` let's you use `Inject.getMeta(name)`.  This
 is plain text that will be stored in a META tag in the HEAD.
 
-* `Inject.rawHead(text)`.  `text` will be inserted in the HTML HEAD.
+* `Inject.rawHead(text, [res])`.  `text` will be inserted in the HTML HEAD.
 
-* `Inject.rawBody(text)`.  `text` will be inserted in the HTML BODY.
+* `Inject.rawBody(text, [res])`.  `text` will be inserted in the HTML BODY.
 
-* `Inject.rawModHtml(func)`.  Calls `func` with the full page HTML as the
-only argument.  Expects the full page HTML to be returned, after modification.
+* `Inject.rawModHtml(func)`.  At injection time, calls `func(html, res)` with
+the full page HTML which it expects to be returned, in full, after modification.
+`res` is the current http connection resource.
 e.g.
 
 ```js
 Inject.rawModHtml(function(html) {
 	return html.replace(/blah/, 'something');
 });
+```
+
+* `Inject.appUrl(url)`.  A copy of Meteor's internal appUrl() method to see
+if a resource is should be served the initial HTML page.
+
+## Example
+
+```js
+if (Meteor.isServer) {
+  if (!Package.appcache)
+  WebApp.connectHandlers.use(function(req, res, next) {
+    if(Inject.appUrl(req.url)) {
+      Inject.obj('myData', makeData(), res);
+    }
+    next();
+  });
+}
+	
+if (Meteor.isClient) {
+  // available immediately
+  var myData = Inject.getObj('myData');
+}
 ```
 
 ## Roadmap

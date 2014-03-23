@@ -1,26 +1,29 @@
 Inject = {
 
   // Wrapper for injectMeta() which will EJSON.stringify obj, and parse with Inject.getObj()
-  obj: function(name, obj) {
-    this.meta(name, EJSON.stringify(obj));
+  obj: function(name, obj, res) {
+    this.meta(name, EJSON.stringify(obj, res));
   },
   objList: {},
 
   // Inserts a META called `name`, whose `content` can be retrieved with Inject.getMeta()
-  meta: function(name, content) {
+  meta: function(name, content, res) {
     if (!_.isString(content))
       throw new Error('Inject.meta(name, content) expects `content` to be a String');
     this.rawHead("<meta name='" + name.replace("'", '&apos;')
-      + "' content='" + content.replace("'", '&apos;') + "'>");
+      + "' content='" + content.replace("'", '&apos;') + "'>", res);
   },
   metaList: {},
 
-  rawHead: function(text) {
-    this.rawHeads.push(text);
+  rawHead: function(text, res) {
+    if (res)
+      this.resPush(res, 'rawHeads', text);
+    else
+      this.rawHeads.push(text);
   },
   rawHeads: [],
 
-  rawBody: function(text) {
+  rawBody: function(text, res) {
     this.rawBodies.push(text);
   },
   rawBodies: [],
@@ -31,19 +34,29 @@ Inject = {
   },
   rawModHtmlFuncs: [ ],
 
-
   /* -- Below code is all internal */
 
-  injectHeads: function(html) {
+  injectHeads: function(html, res) {
+    var heads = _.union(Inject.rawHeads, res.Inject && res.Inject.rawHeads || []);
+
     var injectHtml = '';
-    for (var i=0; i < Inject.rawHeads.length; i++)
-      injectHtml = '  ' + Inject.rawHeads[i] + '\n';
+    for (var i=0; i < heads.length; i++)
+      injectHtml = '  ' + heads[i] + '\n';
+
     return html.replace('<head>', '<head>\n' + injectHtml + '\n');
   },
   injectBodies: function(html) {
 
-  }
+  },
 
+  // ensure object exists and push it
+  resPush: function(res, key, value) {
+    if (!res.Inject)
+      res.Inject = {};
+    if (!res.Inject[key])
+      res.Inject[key] = [];
+    res.Inject[key].push(value);
+  }
 
 };
 
@@ -70,7 +83,7 @@ http.OutgoingMessage.prototype.write = function(chunk, encoding) {
     encoding === undefined && /<!DOCTYPE html>/.test(chunk)) {
 
     for (var i=0; i < Inject.rawModHtmlFuncs.length; i++)
-      chunk = Inject.rawModHtmlFuncs[i](chunk);
+      chunk = Inject.rawModHtmlFuncs[i](chunk, this);
 
     this.iInjected = true;
   }
@@ -80,7 +93,7 @@ http.OutgoingMessage.prototype.write = function(chunk, encoding) {
 
 //meteor algorithm to check if this is a meteor serving http request or not
 //add routepolicy package to the fast-render
-function appUrl(url) {
+Inject.appUrl = function(url) {
   if (url === '/favicon.ico' || url === '/robots.txt')
     return false;
 
