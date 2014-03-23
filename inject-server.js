@@ -1,8 +1,8 @@
 Inject = {
 
-  // Wrapper for injectMeta() which will JSON.stringify obj, and parse with Inject.getObj()
+  // Wrapper for injectMeta() which will EJSON.stringify obj, and parse with Inject.getObj()
   obj: function(name, obj) {
-    this.meta(name, JSON.stringify(obj));
+    this.meta(name, EJSON.stringify(obj));
   },
   objList: {},
 

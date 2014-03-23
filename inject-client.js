@@ -2,7 +2,7 @@ Inject = {
 
 	getObj: function(name) {
 		var json = this.metas[name];
-		return json ? JSON.parse(json) : undefined;
+		return json ? EJSON.parse(json) : undefined;
 	},
 
 	getMeta: function(name) {
