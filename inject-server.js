@@ -56,16 +56,12 @@ Inject = {
   	if (_.isEmpty(objs))
   		return html;
 
-  	console.log(objs);
-
   	var obj, injectHtml = '';
   	for (id in objs) {
   		obj = _.isFunction(objs[id]) ? objs[id](res) : objs[id];
-  		console.log(obj);
   		injectHtml += "  <script id='" + id.replace("'", '&apos;')
         + "' type='application/ejson'>" + EJSON.stringify(obj) 
         + "</script>";
-        console.log(injectHtml);
   	}
 
     return html.replace('<head>', '<head>\n' + injectHtml + '\n');
