@@ -61,10 +61,10 @@ Inject = {
   		obj = _.isFunction(objs[id]) ? objs[id](res) : objs[id];
   		injectHtml += "  <script id='" + id.replace("'", '&apos;')
         + "' type='application/ejson'>" + EJSON.stringify(obj) 
-        + "</script>";
+        + "</script>\n";
   	}
 
-    return html.replace('<head>', '<head>\n' + injectHtml + '\n');
+    return html.replace('<head>', '<head>\n' + injectHtml);
   },
 
   injectMeta: function(html, res) {
@@ -76,10 +76,10 @@ Inject = {
   	for (id in metas) {
   		meta = _.isFunction(metas[id]) ? metas[id](res) : metas[id];
   		injectHtml += "  <meta id='" + id.replace("'", '&apos;')
-      	+ "' content='" + meta.replace("'", '&apos;') + "'>", res;
+      	+ "' content='" + meta.replace("'", '&apos;') + "'>\n", res;
   	}
 
-    return html.replace('<head>', '<head>\n' + injectHtml + '\n');
+    return html.replace('<head>', '<head>\n' + injectHtml);
   },
 
   injectHeads: function(html, res) {
@@ -91,7 +91,7 @@ Inject = {
     for (id in heads)
       injectHtml = '  ' + heads[id] + '\n';
 
-    return html.replace('<head>', '<head>\n' + injectHtml + '\n');
+    return html.replace('<head>', '<head>\n' + injectHtml);
   },
   injectBodies: function(html, res) {
     var bodies = _.extend({}, Inject.rawBodies, res.Inject && res.Inject.rawBodies);
@@ -102,7 +102,7 @@ Inject = {
     for (id in bodies)
       injectHtml = '  ' + bodies[id] + '\n';
 
-    return html.replace('<body>', '<body>\n' + injectHtml + '\n');
+    return html.replace('<body>', '<body>\n' + injectHtml);
   },
 
   // ensure object exists and store there
