@@ -3,6 +3,9 @@
 API to modify the initial HTML sent by Meteor to the client.  An abstraction
 of the approach first used by Arunoda Susiripala in [fast-render](https://atmosphere.meteor.com/package/fast-render).
 
+**THIS IS A PREVIEW MEANT FOR FEEDBACK**.  You (probably) don't want to use
+this yet.
+
 ## How, when, why, etc?
 
 This script is targetted at advanced smart package developers.  Sometimes we
