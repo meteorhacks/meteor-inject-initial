@@ -56,12 +56,16 @@ Inject = {
   	if (_.isEmpty(objs))
   		return html;
 
+  	console.log(objs);
+
   	var obj, injectHtml = '';
   	for (id in objs) {
   		obj = _.isFunction(objs[id]) ? objs[id](res) : objs[id];
+  		console.log(obj);
   		injectHtml += "  <script id='" + id.replace("'", '&apos;')
-        + "' type='application/ejson'>" + EJSON.stringify(objs[id]) 
+        + "' type='application/ejson'>" + EJSON.stringify(obj) 
         + "</script>";
+        console.log(injectHtml);
   	}
 
     return html.replace('<head>', '<head>\n' + injectHtml + '\n');
@@ -76,7 +80,7 @@ Inject = {
   	for (id in metas) {
   		meta = _.isFunction(metas[id]) ? metas[id](res) : metas[id];
   		injectHtml += "  <meta id='" + id.replace("'", '&apos;')
-      	+ "' content='" + content.replace("'", '&apos;') + "'>", res;
+      	+ "' content='" + meta.replace("'", '&apos;') + "'>", res;
   	}
 
     return html.replace('<head>', '<head>\n' + injectHtml + '\n');
