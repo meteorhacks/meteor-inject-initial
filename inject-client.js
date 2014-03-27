@@ -1,8 +1,9 @@
 Inject = {
 
 	getObj: function(name) {
-		var json = this.metas[name];
-		return json ? EJSON.parse(json) : undefined;
+		var json = document.getElementById(name);
+		// Apparently .text doesn't work on some IE's.
+		return json ? EJSON.parse(json.innerHTML) : undefined;
 	},
 
 	getMeta: function(name) {

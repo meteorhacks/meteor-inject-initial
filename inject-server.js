@@ -2,7 +2,11 @@ Inject = {
 
   // Wrapper for injectMeta() which will EJSON.stringify obj, and parse with Inject.getObj()
   obj: function(name, obj, res) {
-    this.meta(name, EJSON.stringify(obj, res));
+    if (!_.isObject(obj))
+      throw new Erorr('Inject.obj(name, obj [,res]) expects `obj` to be an Object');
+    //this.meta(name, JSON.stringify(obj), res);
+    this.rawHead("<script id='" + name.replace("'", '&apos;')
+        + "' type='application/json'>" + EJSON.stringify(obj) + "</script>");
   },
   objList: {},
 
