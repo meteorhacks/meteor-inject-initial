@@ -7,8 +7,11 @@ Npm.depends({
 });
 
 Package.on_use(function (api) {
-	api.use('ejson', ['client','server']);
+	api.use('routepolicy', 'server');
+	api.use(['ejson', 'underscore'], ['client','server']);
+
 	api.add_files('inject-server.js', 'server');
 	api.add_files('inject-client.js', 'client');
+
 	api.export('Inject', ['client', 'server']);
 });

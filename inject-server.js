@@ -1,71 +1,124 @@
 Inject = {
 
   // Wrapper for injectMeta() which will EJSON.stringify obj, and parse with Inject.getObj()
-  obj: function(name, obj, res) {
-    if (!_.isObject(obj))
-      throw new Erorr('Inject.obj(name, obj [,res]) expects `obj` to be an Object');
-    //this.meta(name, JSON.stringify(obj), res);
-    this.rawHead("<script id='" + name.replace("'", '&apos;')
-        + "' type='application/json'>" + EJSON.stringify(obj) + "</script>");
+  obj: function(id, data, res) {
+  	if (!(_.isObject(data) || _.isFunction(data)))
+      throw new Erorr('Inject.obj(id, data [,res]) expects `data` to be an Object or Function');
+
+    if (res)
+    	this.resAssign(res, 'objList', id, data);
+    else
+    	this.objList[id] = data;
   },
   objList: {},
 
-  // Inserts a META called `name`, whose `content` can be retrieved with Inject.getMeta()
-  meta: function(name, content, res) {
-    if (!_.isString(content))
-      throw new Error('Inject.meta(name, content) expects `content` to be a String');
-    this.rawHead("<meta name='" + name.replace("'", '&apos;')
-      + "' content='" + content.replace("'", '&apos;') + "'>", res);
+  // Inserts a META called `id`, whose `content` can be retrieved with Inject.getMeta()
+  meta: function(id, data, res) {
+  	if (!(_.isString(data) || _.isFunction(data)))
+      throw new Erorr('Inject.meta(id, data [,res]) expects `data` to be an String or Function');
+
+    if (res)
+    	this.resAssign(res, 'metaList', id, data);
+    else
+    	this.metaList[id] = data;
   },
   metaList: {},
 
-  rawHead: function(text, res) {
+  rawHead: function(id, textOrFunc, res) {
     if (res)
-      this.resPush(res, 'rawHeads', text);
+      this.resAssign(res, 'rawHeads', id, textOrFunc);
     else
-      this.rawHeads.push(text);
+      this.rawHeads[id] = textOrFunc;
   },
-  rawHeads: [],
+  rawHeads: {},
 
-  rawBody: function(text, res) {
-    this.rawBodies.push(text);
+  rawBody: function(id, textOrFunc, res) {
+    if (res)
+      this.resPush(res, 'rawBodies', id, textOrFunc);
+    else
+	  this.rawBodies[id] = text;
   },
-  rawBodies: [],
+  rawBodies: {},
 
   // The callback receives the entire HTML page and must return a modified version
-  rawModHtml: function(func) {
-    this.rawModHtmlFuncs.push(func);
+  rawModHtml: function(id, func) {
+  	if (!_.isFunction(func))
+			throw new Error('Inject func id "' + id + '" should be a function, not '
+				+ typeof(func));
+    this.rawModHtmlFuncs[id] = func;
   },
-  rawModHtmlFuncs: [ ],
+  rawModHtmlFuncs: {},
 
   /* -- Below code is all internal */
 
-  injectHeads: function(html, res) {
-    var heads = _.union(Inject.rawHeads, res.Inject && res.Inject.rawHeads || []);
+  injectObjects: function(html, res) {
+  	var objs = _.extend({}, Inject.objList, res.Inject && res.Inject.objList);
+  	if (_.isEmpty(objs))
+  		return html;
 
-    var injectHtml = '';
-    for (var i=0; i < heads.length; i++)
-      injectHtml = '  ' + heads[i] + '\n';
+  	var obj, injectHtml = '';
+  	for (id in objs) {
+  		obj = _.isFunction(objs[id]) ? objs[id](res) : objs[id];
+  		injectHtml += "  <script id='" + id.replace("'", '&apos;')
+        + "' type='application/ejson'>" + EJSON.stringify(objs[id]) 
+        + "</script>";
+  	}
 
     return html.replace('<head>', '<head>\n' + injectHtml + '\n');
   },
-  injectBodies: function(html) {
 
+  injectMeta: function(html, res) {
+  	var metas = _.extend({}, Inject.metaList, res.Inject && res.Inject.metaList);
+  	if (_.isEmpty(metas))
+  		return html;
+
+  	var meta, injectHtml = '';
+  	for (id in metas) {
+  		meta = _.isFunction(metas[id]) ? metas[id](res) : metas[id];
+  		injectHtml += "  <meta id='" + id.replace("'", '&apos;')
+      	+ "' content='" + content.replace("'", '&apos;') + "'>", res;
+  	}
+
+    return html.replace('<head>', '<head>\n' + injectHtml + '\n');
   },
 
-  // ensure object exists and push it
-  resPush: function(res, key, value) {
+  injectHeads: function(html, res) {
+    var heads = _.extend({}, Inject.rawHeads, res.Inject && res.Inject.rawHeads);
+    if (_.isEmpty(heads))
+    	return html;
+
+    var injectHtml = '';
+    for (id in heads)
+      injectHtml = '  ' + heads[id] + '\n';
+
+    return html.replace('<head>', '<head>\n' + injectHtml + '\n');
+  },
+  injectBodies: function(html, res) {
+    var bodies = _.extend({}, Inject.rawBodies, res.Inject && res.Inject.rawBodies);
+    if (_.isEmpty(bodies))
+    	return html;
+
+    var injectHtml = '';
+    for (id in bodies)
+      injectHtml = '  ' + bodies[id] + '\n';
+
+    return html.replace('<body>', '<body>\n' + injectHtml + '\n');
+  },
+
+  // ensure object exists and store there
+  resAssign: function(res, key, id, value) {
     if (!res.Inject)
       res.Inject = {};
     if (!res.Inject[key])
-      res.Inject[key] = [];
-    res.Inject[key].push(value);
+      res.Inject[key] = {};
+    res.Inject[key][id] = value;
   }
 
 };
 
-Inject.rawModHtml(Inject.injectHeads);
-
+Inject.rawModHtml('injectHeads', Inject.injectHeads);
+Inject.rawModHtml('injectBodies', Inject.injectBodies);
+Inject.rawModHtml('injectObjects', Inject.injectObjects);
 
 /*
  * All this code is below adapted from Fast Render by Arunoda Susiripala
@@ -86,8 +139,12 @@ http.OutgoingMessage.prototype.write = function(chunk, encoding) {
   if(!this.iInjected && 
     encoding === undefined && /<!DOCTYPE html>/.test(chunk)) {
 
-    for (var i=0; i < Inject.rawModHtmlFuncs.length; i++)
-      chunk = Inject.rawModHtmlFuncs[i](chunk, this);
+    for (id in Inject.rawModHtmlFuncs) {
+      chunk = Inject.rawModHtmlFuncs[id](chunk, this);
+      if (!_.isString(chunk))
+      	throw new Error('Inject func id "' + id + '" must return HTML, not '
+      		+ typeof(chunk));
+    }
 
     this.iInjected = true;
   }
@@ -96,13 +153,12 @@ http.OutgoingMessage.prototype.write = function(chunk, encoding) {
 };
 
 //meteor algorithm to check if this is a meteor serving http request or not
-//add routepolicy package to the fast-render
 Inject.appUrl = function(url) {
   if (url === '/favicon.ico' || url === '/robots.txt')
     return false;
 
   // NOTE: app.manifest is not a web standard like favicon.ico and
-  // robots.txt. It is a file name we have chosen to use for HTML5
+  // robots.txt. It is a file id we have chosen to use for HTML5
   // appcache URLs. It is included here to prevent using an appcache
   // then removing it from poisoning an app permanently. Eventually,
   // once we have server side routing, this won't be needed as
