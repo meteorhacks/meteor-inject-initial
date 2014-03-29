@@ -1,5 +1,5 @@
 if (Meteor.isClient) {
-  console.log(Inject.getObj('cow'));
+  console.log(Injected.obj('cow'));
 
   Template.hello.greeting = function () {
     return "Welcome to website.";
@@ -16,6 +16,9 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
   Inject.obj('cow', {goes:'moo'});
+  Inject.rawModHtml('moo', function(html) {
+  	return { a: 1};
+  });
 
   Meteor.startup(function () {
     // code to run on server at startup

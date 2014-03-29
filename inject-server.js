@@ -1,6 +1,6 @@
 Inject = {
 
-  // Wrapper for injectMeta() which will EJSON.stringify obj, and parse with Inject.getObj()
+  // stores in a script type=application/ejson tag, accessed with Injected.obj('id')
   obj: function(id, data, res) {
   	if (!(_.isObject(data) || _.isFunction(data)))
       throw new Erorr('Inject.obj(id, data [,res]) expects `data` to be an Object or Function');
@@ -12,7 +12,7 @@ Inject = {
   },
   objList: {},
 
-  // Inserts a META called `id`, whose `content` can be retrieved with Inject.getMeta()
+  // Inserts a META called `id`, whose `content` can be accessed with Injected.meta()
   meta: function(id, data, res) {
   	if (!(_.isString(data) || _.isFunction(data)))
       throw new Erorr('Inject.meta(id, data [,res]) expects `data` to be an String or Function');
@@ -143,7 +143,7 @@ http.OutgoingMessage.prototype.write = function(chunk, encoding) {
       chunk = Inject.rawModHtmlFuncs[id](chunk, this);
       if (!_.isString(chunk))
       	throw new Error('Inject func id "' + id + '" must return HTML, not '
-      		+ typeof(chunk));
+      		+ typeof(chunk) + '\n' + JSON.stringify(chunk, null, 2));
     }
 
     this.iInjected = true;

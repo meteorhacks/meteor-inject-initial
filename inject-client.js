@@ -1,12 +1,12 @@
-Inject = {
+Injected = {
 
-	getObj: function(name) {
+	obj: function(name) {
 		var json = document.getElementById(name);
 		// Apparently .text doesn't work on some IE's.
 		return json ? EJSON.parse(json.innerHTML) : undefined;
 	},
 
-	getMeta: function(name) {
+	meta: function(name) {
 		return this.metas[name];
 	},
 
@@ -21,4 +21,4 @@ Inject = {
 	metas: {}
 }
 
-Inject.parseMetas();
+Injected.parseMetas();

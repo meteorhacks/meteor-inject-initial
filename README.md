@@ -42,7 +42,8 @@ up with a regular connectHandler).
 
 Methods:
 
-* `Inject.obj(id, objOrFunc, [res])` let's you use `Inject.getObj(id)`.  Obj
+* `Inject.obj(id, objOrFunc, [res])` on server, accessible via
+`Injected.obj(id)` on the client.  Obj
 of course may contain data only, and no references (to functions, other objects,
 etc). Stored in EJSON in a
 `&lt;script id="id" type="application/ejson">&lt;</script>`
@@ -50,8 +51,8 @@ tag in the HEAD; this allows it to work even if
 `browserPolicy.content.disallowInlineScripts()` has been called.  Note that `id`
 must be unique in the entire DOM!
 
-* `Inject.meta(id, textOrFunc, [res])` let's you use `Inject.getMeta(id)`.  This
-is plain text that will be stored in a META tag in the HEAD.
+* `Inject.meta(id, textOrFunc, [res])`, accessible via `Injected.meta(id)`
+on client.  This is plain text that will be stored in a META tag in the HEAD.
 
 * `Inject.rawHead(id, textOrFunc, [res])`.  `text` will be inserted in the HTML HEAD.
 
