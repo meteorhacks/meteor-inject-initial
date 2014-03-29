@@ -139,6 +139,7 @@ http.OutgoingMessage.prototype.write = function(chunk, encoding) {
   if(!this.iInjected && 
     encoding === undefined && /<!DOCTYPE html>/.test(chunk)) {
 
+  	chunk = chunk.toString();
     for (id in Inject.rawModHtmlFuncs) {
       chunk = Inject.rawModHtmlFuncs[id](chunk, this);
       if (!_.isString(chunk))
