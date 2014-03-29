@@ -17,7 +17,7 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Inject.obj('cow', {goes:'moo'});
   Inject.rawModHtml('moo', function(html) {
-  	return { a: 1};
+  	return html.replace('<head>', '<head>\n<meta>');
   });
 
   Meteor.startup(function () {

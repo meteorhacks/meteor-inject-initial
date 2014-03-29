@@ -137,7 +137,7 @@ var originalWrite = http.OutgoingMessage.prototype.write;
 http.OutgoingMessage.prototype.write = function(chunk, encoding) {
   //prevent hijacking other http requests
   if(!this.iInjected && 
-    encoding === undefined && /<!DOCTYPE html>/.test(chunk)) {
+    encoding === undefined && /^<!DOCTYPE html>/.test(chunk)) {
 
   	chunk = chunk.toString();
     for (id in Inject.rawModHtmlFuncs) {

@@ -14,5 +14,5 @@ Package.on_use(function (api) {
 	api.add_files('inject-client.js', 'client');
 
 	api.export('Inject', 'server');
-	api.export('Injected', 'client');
+	api.export(['Injected', 'Inject'], 'client');
 });

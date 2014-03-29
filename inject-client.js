@@ -22,3 +22,9 @@ Injected = {
 }
 
 Injected.parseMetas();
+
+// deprecated
+Inject = {
+	getObj: Injected.obj,
+	getMeta: Injected.meta
+}
