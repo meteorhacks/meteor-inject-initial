@@ -49,21 +49,15 @@ etc). Stored in EJSON in a
 `&lt;script id="id" type="application/ejson">&lt;</script>`
 tag in the HEAD; this allows it to work even if
 `browserPolicy.content.disallowInlineScripts()` has been called.  Note that `id`
-must be unique in the entire DOM!
-
-e.g.
+must be unique in the entire DOM!  e.g.
 
 ```js
-if (Meteor.isServer) {
-
+if (Meteor.isServer)
   Inject.obj('myData', myData);
 
-} else if (Meteor.isClient) {
-
-  // available immediateyl
+// always available immediately
+if (Meteor.isClient)
   var myData = Injected.obj('myData');
-
-}
 ```
 
 * `Inject.meta(id, textOrFunc, [res])`, accessible via `Injected.meta(id)`
