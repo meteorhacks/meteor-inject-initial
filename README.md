@@ -51,6 +51,21 @@ tag in the HEAD; this allows it to work even if
 `browserPolicy.content.disallowInlineScripts()` has been called.  Note that `id`
 must be unique in the entire DOM!
 
+e.g.
+
+```js
+if (Meteor.isServer) {
+
+  Inject.obj('myData', myData);
+
+} else if (Meteor.isClient) {
+
+  // available immediateyl
+  var myData = Injected.obj('myData');
+
+}
+```
+
 * `Inject.meta(id, textOrFunc, [res])`, accessible via `Injected.meta(id)`
 on client.  This is plain text that will be stored in a META tag in the HEAD.
 
@@ -60,7 +75,7 @@ on client.  This is plain text that will be stored in a META tag in the HEAD.
 
 * `Inject.rawModHtml(id, func)`.  At injection time, calls `func(html, res)` with
 the full page HTML which it expects to be returned, in full, after modification.
-`res` is the current http connection resource.
+`res` is the current http connection response request.
 e.g.
 
 ```js
@@ -72,14 +87,14 @@ Inject.rawModHtml('doSomething', function(html) {
 * `Inject.appUrl(url)`.  A copy of Meteor's internal appUrl() method to see
 if a resource is should be served the initial HTML page.
 
-## Example
+**Example of a "per-request" handler:**
 
 ```js
 if (Meteor.isServer) {
   if (!Package.appcache)
   WebApp.connectHandlers.use(function(req, res, next) {
     if(Inject.appUrl(req.url)) {
-      Inject.obj('myData', makeData(), res);
+      Inject.obj('myData', makeDataFor(req), res);
     }
     next();
   });
@@ -87,7 +102,7 @@ if (Meteor.isServer) {
 	
 if (Meteor.isClient) {
   // available immediately
-  var myData = Inject.getObj('myData');
+  var myData = Injected.getObj('myData');
 }
 ```
 
@@ -110,7 +125,7 @@ with the additional security checks in place.
 To that end, if you are attempting to use this script to pass priviledged
 information to the client, be aware of the kinds of issues pointed out
 by Emily Stark
-[https://groups.google.com/d/msg/meteor-talk/1Fg4rNk9JZM/ELX3672QsrEJ here]
+[here](https://groups.google.com/d/msg/meteor-talk/1Fg4rNk9JZM/ELX3672QsrEJ)
 and take the necessary precautions in the callbacks you pass to
 inject-initial.
 
