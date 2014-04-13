@@ -96,7 +96,7 @@ if (Meteor.isServer) {
 	
 if (Meteor.isClient) {
   // available immediately
-  var myData = Injected.getObj('myData');
+  var myData = Injected.obj('myData');
 }
 ```
 
