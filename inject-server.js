@@ -1,4 +1,4 @@
-Inject = {
+Inject = this.Inject = {
 
   // stores in a script type=application/ejson tag, accessed with Injected.obj('id')
   obj: function(id, data, res) {
