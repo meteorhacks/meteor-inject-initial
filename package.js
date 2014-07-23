@@ -10,8 +10,9 @@ Package.on_use(function (api) {
 	api.use('routepolicy', 'server');
 	api.use(['ejson', 'underscore'], ['client','server']);
 
-	api.add_files('inject-server.js', 'server');
-	api.add_files('inject-client.js', 'client');
+	api.add_files('lib/inject-server.js', 'server');
+  api.add_files('lib/inject-core.js', 'server');
+	api.add_files('lib/inject-client.js', 'client');
 
 	api.export('Inject', 'server');
 	api.export(['Injected', 'Inject'], 'client');
