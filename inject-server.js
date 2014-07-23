@@ -91,8 +91,6 @@ Inject = {
     for (id in heads)
       injectHtml += '  ' + heads[id] + '\n';
 
-    console.log(injectHtml);
-
     return html.replace('<head>', '<head>\n' + injectHtml);
   },
   injectBodies: function(html, res) {
