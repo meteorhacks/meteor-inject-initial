@@ -17,6 +17,7 @@ Package.on_test(function(api) {
   api.use('tinytest', 'server');
   api.add_files('test/inject-helpers.js');
   api.add_files('test/inject-public-api.js');
+  api.add_files('test/inject-internal-api.js');
 });
 
 function configurePackage(api) {

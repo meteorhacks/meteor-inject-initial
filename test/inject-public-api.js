@@ -1,5 +1,5 @@
 Tinytest.add(
-  'Inject Server - rawModHtml - text',
+  'Inject Public Apis - rawModHtml - text',
   function (test) {
     function func() {};
     Inject.rawModHtml('id', func);
@@ -8,7 +8,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Inject Server - obj - without res',
+  'Inject Public Apis - obj - without res',
   function (test) {
     var aa = {hello: 10};
     Inject.obj('id1', aa);
@@ -17,7 +17,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Inject Server - obj - with res',
+  'Inject Public Apis - obj - with res',
   function (test) {
     var aa = {hello: 10};
     var res = {};
@@ -27,7 +27,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Inject Server - meta - without res',
+  'Inject Public Apis - meta - without res',
   function (test) {
     var aa = 'text';
     Inject.meta('id1', aa);
@@ -36,7 +36,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Inject Server - meta - with res',
+  'Inject Public Apis - meta - with res',
   function (test) {
     var aa = 'text';
     var res = {};
@@ -46,7 +46,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Inject Server - rawHead - without res',
+  'Inject Public Apis - rawHead - without res',
   function (test) {
     var aa = 'text';
     Inject.rawHead('id1', aa);
@@ -55,7 +55,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Inject Server - rawHead - with res',
+  'Inject Public Apis - rawHead - with res',
   function (test) {
     var aa = 'text';
     var res = {};
@@ -65,7 +65,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Inject Server - rawBody - without res',
+  'Inject Public Apis - rawBody - without res',
   function (test) {
     var aa = 'text';
     Inject.rawBody('id1', aa);
@@ -74,7 +74,7 @@ Tinytest.add(
 );
 
 Tinytest.add(
-  'Inject Server - rawBody - with res',
+  'Inject Public Apis - rawBody - with res',
   function (test) {
     var aa = 'text';
     var res = {};
