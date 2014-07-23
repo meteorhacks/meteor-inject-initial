@@ -3,7 +3,7 @@
     "description": "Allow injection of arbitrary data to initial Meteor HTML page",
     "homepage": "https://github.com/gadicohen/meteor-inject-initial",
     "author": "Gadi Cohen <dragon@wastelands.net>, adapting code by Arunoda",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "git": "https://github.com/gadicc/meteor-inject-initial.git",
 	"packages": {}
 }
