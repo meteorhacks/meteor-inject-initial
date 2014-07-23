@@ -36,7 +36,7 @@ Inject = {
     if (res)
       this.resPush(res, 'rawBodies', id, textOrFunc);
     else
-	  this.rawBodies[id] = text;
+	  this.rawBodies[id] = textOrFunc;
   },
   rawBodies: {},
 
@@ -60,7 +60,7 @@ Inject = {
   	for (id in objs) {
   		obj = _.isFunction(objs[id]) ? objs[id](res) : objs[id];
   		injectHtml += "  <script id='" + id.replace("'", '&apos;')
-        + "' type='application/ejson'>" + EJSON.stringify(obj) 
+        + "' type='application/ejson'>" + EJSON.stringify(obj)
         + "</script>\n";
   	}
 
@@ -89,7 +89,7 @@ Inject = {
 
     var injectHtml = '';
     for (id in heads)
-      injectHtml = '  ' + heads[id] + '\n';
+      injectHtml += '  ' + heads[id] + '\n';
 
     return html.replace('<head>', '<head>\n' + injectHtml);
   },
@@ -100,7 +100,7 @@ Inject = {
 
     var injectHtml = '';
     for (id in bodies)
-      injectHtml = '  ' + bodies[id] + '\n';
+      injectHtml += '  ' + bodies[id] + '\n';
 
     return html.replace('<body>', '<body>\n' + injectHtml);
   },
@@ -136,7 +136,7 @@ var http = Npm.require('http');
 var originalWrite = http.OutgoingMessage.prototype.write;
 http.OutgoingMessage.prototype.write = function(chunk, encoding) {
   //prevent hijacking other http requests
-  if(!this.iInjected && 
+  if(!this.iInjected &&
     encoding === undefined && /^<!DOCTYPE html>/.test(chunk)) {
 
   	chunk = chunk.toString();
