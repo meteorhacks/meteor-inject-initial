@@ -1,5 +1,8 @@
 Package.describe({
-    summary: "Allow injection of arbitrary data to initial Meteor HTML page"
+  summary: "Allow injection of arbitrary data to initial Meteor HTML page",
+  version: "1.0.0",
+  git: "https://github.com/gadicc/meteor-inject-initial.git",
+  name: "meteorhacks:inject-initial"
 });
 
 Npm.depends({
@@ -22,6 +25,10 @@ Package.on_test(function(api) {
 });
 
 function configurePackage(api) {
+  if(api.versionsFrom) {
+    api.versionsFrom('METEOR@0.9.0');
+  }
+  
   api.use('routepolicy', 'server');
   api.use(['ejson', 'underscore'], ['client','server']);
 
