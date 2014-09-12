@@ -1,5 +1,15 @@
 # vNEXT
 
+# v1.0.1
+
+* Escape use of $ in string.replace in all internal functions (fixes #11)
+
+# v1.0.0
+
+* Re-release in Meteor 0.9.0 package system, with better semver
+* Note, package will be renamed to meteorhacks:inject-initial once MDG
+  finishes up with rename and redirect support.
+
 # v0.0.19
 
 * Critical work (fixes and tests) from arunoda.  Thank you!
