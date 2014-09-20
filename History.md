@@ -1,5 +1,9 @@
 # vNEXT
 
+# v1.0.2
+
+* No code change.  Deprecate gadicohen:inject-initial for meteorhacks:inject-initial
+
 # v1.0.1
 
 * Escape use of $ in string.replace in all internal functions (fixes #11)
