@@ -1,5 +1,9 @@
 # vNEXT
 
+# v1.0.3
+
+* Fix broken `Injected.meta()`, thanks @JProgrammer! (#16)
+
 # v1.0.2
 
 * No code change.  Deprecate gadicohen:inject-initial for meteorhacks:inject-initial

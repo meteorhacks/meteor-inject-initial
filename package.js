@@ -1,6 +1,6 @@
 Package.describe({
   summary: "Allow injection of arbitrary data to initial Meteor HTML page",
-  version: "1.0.2",
+  version: "1.0.3",
   git: "https://github.com/meteorhacks/meteor-inject-initial.git",
   name: "meteorhacks:inject-initial"
 });
@@ -17,11 +17,14 @@ Package.on_use(function (api) {
 
 Package.on_test(function(api) {
   configurePackage(api);
-  api.use('tinytest', 'server');
-  api.add_files('test/inject-helpers.js');
-  api.add_files('test/inject-public-api.js');
-  api.add_files('test/inject-internal-api.js');
-  api.add_files('test/inject-core.js');
+  api.use('tinytest', ['client', 'server']);
+
+  api.add_files('test/inject-helpers.js', 'server');
+  api.add_files('test/inject-public-api.js', 'server');
+  api.add_files('test/inject-internal-api.js', 'server');
+  api.add_files('test/inject-core.js', 'server');
+
+  api.add_files('test/injected-public-api.js', ['server', 'client']);
 });
 
 function configurePackage(api) {
