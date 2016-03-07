@@ -1,5 +1,10 @@
 # vNEXT
 
+# v1.0.4-rc.0
+
+* Change injection strategy to work with both Meteor 1.3 and earlier.
+  (fixes #17, #18)
+
 # v1.0.3
 
 * Fix broken `Injected.meta()`, thanks @JProgrammer! (#16)
