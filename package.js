@@ -1,6 +1,6 @@
 Package.describe({
   summary: "Allow injection of arbitrary data to initial Meteor HTML page",
-  version: "1.0.4-rc.0",
+  version: "1.0.4",
   git: "https://github.com/meteorhacks/meteor-inject-initial.git",
   name: "meteorhacks:inject-initial"
 });

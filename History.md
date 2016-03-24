@@ -1,6 +1,6 @@
 # vNEXT
 
-# v1.0.4-rc.0
+# v1.0.4
 
 * Change injection strategy to work with both Meteor 1.3 and earlier.
   (fixes #17, #18)
