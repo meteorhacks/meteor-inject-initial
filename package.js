@@ -29,7 +29,7 @@ Package.onTest(function(api) {
 
 function configurePackage(api) {
   if(api.versionsFrom) {
-    api.versionsFrom('METEOR@1.0.0');
+    api.versionsFrom('METEOR@1.0');
   }
   
   api.use(['routepolicy', 'webapp'], 'server');
